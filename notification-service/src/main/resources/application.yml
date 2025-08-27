@@ -1,0 +1,47 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: notification-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
+  instance:
+    preferIpAddress: true
+
+# Kafka Configuration (if using Kafka for async notifications)
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    notifications: library-notifications
+
+# WebSocket Configuration (if using WebSocket for real-time notifications)
+websocket:
+  endpoint: /ws
+  topic: /topic/notifications
+  app: /app
